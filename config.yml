@@ -35,3 +35,22 @@ custom-commands:
     help: List the boards (projects) available with their ids
     script: |-
       {{jira}} req --template boards -M GET /rest/agile/1.0/board
+
+  - name: sprints
+    help: List the sprints available with their internal ids
+    args:
+      - name: board_id
+        required: true
+    script: |-
+      {{jira}} req --template sprints -M GET /rest/agile/1.0/board/{{args.board_id}}/sprint
+
+  - name: addtosprint
+    help: Add issue (eg. TEST-123) to sprint SPRINTID
+    args: 
+      - name: issue
+        required: true
+      - name: sprint_id
+        required: true
+    script: |-
+      {{jira}} req -M POST /rest/agile/1.0/sprint/{{args.sprint_id}}/issue '{"issues":["{{args.issue}}"]}'
+  
