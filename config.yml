@@ -1,5 +1,4 @@
 user: USER
-password-source: PASSWORD
 project: PROJECTSHORTCODE
 endpoint: https://BASE_URL
 editor: vim
@@ -23,3 +22,16 @@ custom-commands:
           {{jira}} list --template table --query "resolution = unresolved and assignee=currentuser() ORDER BY priority asc, created"
       fi
 
+  - name: nextsprint
+    help: display issues for future sprints
+    script: |-
+      if [ -n "$JIRA_PROJECT" ]; then
+          {{jira}} list --query "sprint in futureSprints() and type != epic and resolution = unresolved and project=$JIRA_PROJECT ORDER BY rank asc, created"
+      else
+          echo "\"project: ...\" configuration missing from .jira.d/config.yml"
+      fi
+
+  - name: boards
+    help: List the boards (projects) available with their ids
+    script: |-
+      {{jira}} req --template boards -M GET /rest/agile/1.0/board

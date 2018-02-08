@@ -1,0 +1,2 @@
+{{ range .values }}{{ .location.name | append ":" | printf "%-12s"}} {{ .id }} {{.self}}
+{{ end }}
